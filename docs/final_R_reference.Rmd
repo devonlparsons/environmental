@@ -1,0 +1,118 @@
+---
+title: "R Reference Guide"
+output: 
+  html_document:
+    toc: yes
+    toc_float: yes
+    theme: darkly
+author: "Devon Parsons"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# R Reference Guide {.tabset .tabset-pills}
+
+## Loading Data and Packages
+```{r}
+## You can use require or library functions interchangeably when loading data and packages
+require(here)
+library(palmerpenguins)
+
+## read.csv(here("location", ".csv")) reads a file in table format and creates a data frame from it, with cases corresponding to lines and variables to fields in the file. The vector name is ginkgo
+require(here)
+ginkgo <- read.csv(here("data","ginkgo_data_2021.csv"))
+```
+
+## Data Structures
+```{r}
+## num_vec is only numbers, char_vec is only characters. You can either type the name of the vector or use print(name of vector) to see the contents
+num_vec <- c(4, 8, 10, 30, 32)
+
+char_vec <- c("i", "love", "data analysis")
+
+## tells the length of a vector
+length(num_vec)
+length(char_vec)
+
+##
+mat_1 <- matrix(5:7, nrow = 3, ncol = 4, byrow = TRUE)
+mat_1
+
+nrow(ginkgo)
+ncol(ginkgo)
+dim(ginkgo)
+
+```
+
+## Subsetting
+```{r}
+## subsetting using $
+dat_ginkgo1 <- (ginkgo$max_width)
+
+## subset using brackets
+ginkgo[1]
+ginkgo[2,3]
+ginkgo[3]
+
+## subsetting using subset fxn
+dat_adelie = subset(penguins, species == "Adelie")
+```
+
+## Numerical Data Explanantion
+```{r}
+require(plamerpenguins)
+fit_both = lm(body_mass_g ~ sex : species, data = penguins)
+summary(fit_both)
+mean(fit_both)
+sd(penguins$body_mass_g)
+```
+
+## Graphical Data Exploration
+```{r}
+## scatterplot
+plot(x = ginkgo$max_depth, y = ginkgo$max_width, main = "Max Leaf Width by Depth", ylab = "Max Leaf Width", xlab = "Max Leaf Depth", col = "pink", pch = 20, cex = 1.5, xlim = c(0,140), ylim= c(0,160))
+
+## histogram, breaks specify bins, par groups the figures and mfrow designates how they are presented (2x2)
+par(mfrow = c(2, 2))
+hist(ginkgo$max_depth, main = "Max Leaf Depth", ylab = "Frequency", xlab = "Max Leaf Depth", breaks = 5)
+hist(ginkgo$max_width, main = "Max Leaf Width", ylab = "Frequency", xlab = "Max Leaf Width", breaks = 5)
+hist(ginkgo$notch_depth, main = "Notch Depth", ylab = "Frequency", xlab = "Leaf Notch Depth", breaks = 5)
+hist(ginkgo$petiole_length, main = "Petiole Length", ylab = "Frequency", xlab = "Petiole Length", breaks = 5)
+
+
+## boxplot
+boxplot(ginkgo$petiole_length, main = "Ginkgo Petiole Length", xlab = "Petiole Length", ylab = "Frequency")
+
+## conditioned boxplot
+boxplot(max_width ~ seeds_present, data = ginkgo, main = "Leaf Width conditioned on Seeds Present", ylab = "Max Leaf Widht", xlab = "Seeds Present")
+```
+
+## Distribution Functions
+```{r}
+#find the probability of 10 successes during 12 trials where the probability of
+#success on each trial is 0.6
+dbinom(x=10, size=12, prob=.6)
+
+#find the probability of more than 2 successes during 5 trials where the
+#probability of success on each trial is 0.5
+pbinom(2, size=5, prob=.5, lower.tail=FALSE)
+
+#find the 10th quantile of a binomial distribution with 10 trials and prob
+#of success on each trial = 0.4
+qbinom(.10, size=10, prob=.4)
+
+#find the value of the standard normal distribution pdf at x=0
+dnorm(x=0, mean=0, sd=1)
+
+#find percentage of males that are taller than 74 inches in a population with
+#mean = 70 and sd = 2
+pnorm(74, mean=70, sd=2, lower.tail=FALSE)
+
+#find the Z-score of the 99th quantile of the standard normal distribution 
+qnorm(.99, mean=0, sd=1)
+
+```
+
+
